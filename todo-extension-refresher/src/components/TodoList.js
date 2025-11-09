@@ -88,6 +88,11 @@ function TodoList() {
         if(filter === 'completed') return task.isComplete;
     });
 
+    const sortedTasks = filteredTasks.slice().sort((a, b) => {
+        if (a.isComplete === b.isComplete) return 0;
+        return a.isComplete ? 1 : -1;
+    });
+
     return (
         <div className="todo-list">
             <div className="filters" data-active-filter={filter}>
@@ -110,7 +115,7 @@ function TodoList() {
                     Completed
                 </button>
             </div>
-            {filteredTasks.map(task => (
+            {sortedTasks.map(task => (
                 <TodoItem
                     key={task.taskId}
                     task={task}
