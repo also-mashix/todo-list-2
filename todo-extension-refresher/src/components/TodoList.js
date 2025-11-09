@@ -83,7 +83,7 @@ function TodoList() {
                     key={task.taskId}
                     task={task}
                     deleteTask={deleteTask}
-                    toggleIsComplete={toggleComplete}
+                    toggleComplete={toggleComplete}
                     updateTaskText={updateTaskText}
                 />
             ))}
