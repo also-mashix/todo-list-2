@@ -46,10 +46,18 @@
   text-decoration: line-through;
   color: #ccc;
 }
-.todo-item input {
+.todo-item input[type="checkbox"] {
   color: #333;
   background-color: aqua;
-  text-decoration: line-through;
+}
+
+.todo-item .edit-input {
+  text-decoration: none !important;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  width: 200px;
 }
 .toggle-checkbox {
   width: 20px;
