@@ -3,6 +3,7 @@ import TodoItem from "./TodoItem.js";
 import TaskForm from "./TaskForm.js";
 
 function TodoList() {
+    const [editingTaskId, setEditingTaskId] = useState(null);
     const [tasks, setTasks] = useState(() => {
         const savedTasks = localStorage.getItem('tasks');
         return savedTasks ? JSON.parse(savedTasks) : [
@@ -63,6 +64,22 @@ function TodoList() {
                 return task;
             }
         }));
+        setEditingTaskId(null);
+    }
+
+    function handleStartEditing(taskId) {
+        // If there's already an edited task, save it first
+        if (editingTaskId !== null && editingTaskId !== taskId) {
+            const editedTask = tasks.find(t => t.taskId === editingTaskId);
+            if (editedTask) {
+                // Get the current edit text from the input field
+                const editInput = document.querySelector(`[data-task-id="${editingTaskId}"] .edit-input`);
+                if (editInput) {
+                    updateTaskText(editingTaskId, editInput.value);
+                }
+            }
+        }
+        setEditingTaskId(taskId);
     }
 
     const filteredTasks = tasks.filter(task => {
@@ -82,9 +99,11 @@ function TodoList() {
                 <TodoItem
                     key={task.taskId}
                     task={task}
+                    isEditing={editingTaskId === task.taskId}
                     deleteTask={deleteTask}
                     toggleComplete={toggleComplete}
                     updateTaskText={updateTaskText}
+                    onStartEditing={handleStartEditing}
                 />
             ))}
             <TaskForm text={text} setText={setText} addTask={addTask} />

@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-function TodoItem({task, deleteTask, toggleComplete, updateTaskText}) {
-    const [isEditing, setIsEditing] = useState(false);
+function TodoItem({task, isEditing, deleteTask, toggleComplete, updateTaskText, onStartEditing}) {
     const [editText, setEditText] = useState(task.text);
+
+    // Update editText when task.text changes
+    useEffect(() => {
+        setEditText(task.text);
+    }, [task.text]);
 
     function handleChange() {
         toggleComplete(task.taskId);
     }
 
     function handleDoubleClick() {
-        setIsEditing(true);
+        onStartEditing(task.taskId);
     }
 
     function handleEditChange(e) {
@@ -20,16 +24,15 @@ function TodoItem({task, deleteTask, toggleComplete, updateTaskText}) {
     function handleSubmit(e) {
         e.preventDefault();
         updateTaskText(task.taskId, editText);
-        setIsEditing(false);
     }
 
     function handleCancel() {
-        setIsEditing(false);
         setEditText(task.text);
+        onStartEditing(null);
     }
 
     return (
-        <div className={task.isComplete ? 'todo-item complete' : 'todo-item'}>
+        <div className={task.isComplete ? 'todo-item complete' : 'todo-item'} data-task-id={task.taskId}>
             {isEditing ? (
                 <form className="edit-form" onSubmit={handleSubmit}>
                     <input 
@@ -61,9 +64,15 @@ function TodoItem({task, deleteTask, toggleComplete, updateTaskText}) {
 
 TodoItem.propTypes = {
     task: PropTypes.object.isRequired,
+    isEditing: PropTypes.bool,
     deleteTask: PropTypes.func.isRequired,
     toggleComplete: PropTypes.func.isRequired,
-    updateTaskText: PropTypes.func.isRequired
+    updateTaskText: PropTypes.func.isRequired,
+    onStartEditing: PropTypes.func.isRequired
+};
+
+TodoItem.defaultProps = {
+    isEditing: false
 };
 
 export default TodoItem;
