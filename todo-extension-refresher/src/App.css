@@ -172,12 +172,13 @@ body::after {
   top: 4px;
   left: 4px;
   bottom: 4px;
-  width: calc(33.333% - 8px);
+  width: calc(33.333% - 5.333px);
   background: var(--color-1);
   border-radius: 6px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
   opacity: 0.8;
+  box-sizing: border-box;
 }
 
 .filters[data-active-filter='all']::before {
@@ -185,11 +186,12 @@ body::after {
 }
 
 .filters[data-active-filter='active']::before {
-  transform: translateX(100%);
+  transform: translateX(calc(100% + 4px));
 }
 
 .filters[data-active-filter='completed']::before {
-  transform: translateX(200%);
+  transform: translateX(calc(200% + 8px));
+  width: calc(33.333% - 5px);
 }
 
 .filters button {
@@ -205,6 +207,9 @@ body::after {
   position: relative;
   z-index: 1;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .filters button:hover {
@@ -214,6 +219,14 @@ body::after {
 .filters button[data-active="true"] {
   color: white;
   font-weight: 600;
+}
+
+.todo-list {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .todo-item {
