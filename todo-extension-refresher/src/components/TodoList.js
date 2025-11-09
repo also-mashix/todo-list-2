@@ -90,10 +90,25 @@ function TodoList() {
 
     return (
         <div className="todo-list">
-            <div className="filters">
-                <button onClick={() => setFilter('all')}>All</button>
-                <button onClick={() => setFilter('active')}>Active</button>
-                <button onClick={() => setFilter('completed')}>Completed</button>
+            <div className="filters" data-active-filter={filter}>
+                <button 
+                    onClick={() => setFilter('all')}
+                    data-active={filter === 'all'}
+                >
+                    All
+                </button>
+                <button 
+                    onClick={() => setFilter('active')}
+                    data-active={filter === 'active'}
+                >
+                    Active
+                </button>
+                <button 
+                    onClick={() => setFilter('completed')}
+                    data-active={filter === 'completed'}
+                >
+                    Completed
+                </button>
             </div>
             {filteredTasks.map(task => (
                 <TodoItem
