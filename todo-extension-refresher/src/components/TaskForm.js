@@ -1,27 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * TaskForm component - handles task input and submission
+ * @param {string} props.text - Current text in the input field
+ * @param {Function} props.setText - Function to update the text state
+ * @param {Function} props.addTask - Function to add a new task
+ */
 function TaskForm({ text, setText, addTask }) {
     const inputRef = useRef(null);
 
+    /**
+     * Sets up global key handler to focus input when '/' is pressed
+     */
     useEffect(() => {
         const handleGlobalKeyDown = (e) => {
-            const activeElement = document.activeElement;
-            // Only handle if no input/textarea is focused and key is a printable character
-            if (activeElement.tagName !== 'INPUT' && 
-                activeElement.tagName !== 'TEXTAREA' &&
-                e.key.length === 1 && 
-                !e.ctrlKey && 
-                !e.metaKey && 
-                !e.altKey) {
+            // Only trigger when '/' is pressed with no modifier keys
+            if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 e.preventDefault();
                 inputRef.current.focus();
-                // If input was empty, clear it first
-                if (!text) {
-                    setText(e.key);
-                } else {
-                    // Otherwise append to existing text
-                    setText(prev => prev + e.key);
-                }
             }
         };
 
@@ -29,7 +25,7 @@ function TaskForm({ text, setText, addTask }) {
         return () => {
             window.removeEventListener('keydown', handleGlobalKeyDown);
         };
-    }, [text, setText]);
+    }, [setText]);
 
     return (
         <div className="task-form">

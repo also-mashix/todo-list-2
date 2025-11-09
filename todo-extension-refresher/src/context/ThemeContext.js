@@ -63,6 +63,10 @@ export const ThemeProvider = ({ children }) => {
   };
 
   const lightenColor = (color, percent) => {
+    // Expand shorthand hex to full form
+    if (color.length === 4) {
+      color = color.replace(/^#(.)(.)(.)$/, '#$1$1$2$2$3$3');
+    }
     const num = parseInt(color.replace('#', ''), 16);
     const amt = Math.round(2.55 * percent);
     const R = (num >> 16) + amt;
