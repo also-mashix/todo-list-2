@@ -192,7 +192,13 @@ const ThemeSelector = () => {
                   className={`texture-option ${theme.texture === texture.id ? 'active' : ''}`}
                   onClick={() => handleTextureChange(texture.id)}
                 >
-                  <div className={`texture-preview ${texture.id}`}></div>
+                  <div 
+                    className={`texture-preview ${texture.id}`}
+                    style={{
+                      '--texture-intensity': theme.textureIntensity,
+                      '--texture-color': theme.darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                    }}
+                  ></div>
                   <span>{texture.name}</span>
                 </div>
               ))}

@@ -80,10 +80,11 @@ export const ThemeProvider = ({ children }) => {
     // Ensure intensity is between 0 and 1
     const safeIntensity = Math.min(1, Math.max(0, intensity));
     const root = document.documentElement;
-    let textureStyle = '';
     
-    // Reset any previous texture styles
-    root.style.removeProperty('--texture-style');
+    // Reset any previous texture variables
+    root.style.removeProperty('--texture-image');
+    root.style.removeProperty('--texture-size');
+    root.style.removeProperty('--texture-repeat');
     
     if (texture === 'none') {
       return;
@@ -91,47 +92,32 @@ export const ThemeProvider = ({ children }) => {
     
     switch(texture) {
       case 'noise':
-        textureStyle = `
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E
-            <filter id='noise' x='0%25' y='0%25' width='100%25' height='100%25'%3E
-              <feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E
-            </filter%3E
-            <rect width='100%25' height='100%25' filter='url(%23noise)' opacity='${0.15 * safeIntensity}'/%3E
-          %3C/svg%3E");
-          background-blend-mode: overlay;
-          background-repeat: repeat;
-        `;
+        root.style.setProperty('--texture-image', `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0%25' y='0%25' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='${0.6 * safeIntensity}'/%3E%3C/svg%3E")`);
+        root.style.setProperty('--texture-size', '200px 200px');
+        root.style.setProperty('--texture-repeat', 'repeat');
         break;
       case 'grid':
         const gridOpacity = 0.1 * safeIntensity;
         const gridColor = isDark ? `rgba(255, 255, 255, ${gridOpacity})` : `rgba(0, 0, 0, ${gridOpacity})`;
-        textureStyle = `
-          background-image: 
-            linear-gradient(${gridColor} 1px, transparent 1px),
-            linear-gradient(90deg, ${gridColor} 1px, transparent 1px);
-          background-size: ${20 / (1 + safeIntensity)}px ${20 / (1 + safeIntensity)}px;
-          background-position: -1px -1px;
-        `;
+        const gridSize = 20 / (1 + safeIntensity);
+        root.style.setProperty('--texture-image', `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`);
+        root.style.setProperty('--texture-size', `${gridSize}px ${gridSize}px`);
+        root.style.setProperty('--texture-repeat', 'repeat');
         break;
       case 'dots':
         const dotOpacity = 0.15 * safeIntensity;
         const dotColor = isDark ? `rgba(255, 255, 255, ${dotOpacity})` : `rgba(0, 0, 0, ${dotOpacity})`;
         const dotSize = 1 + (1 * safeIntensity);
         const dotSpacing = 15 - (5 * safeIntensity);
-        textureStyle = `
-          background-image: radial-gradient(${dotColor} ${dotSize}px, transparent ${dotSize}px);
-          background-size: ${dotSpacing}px ${dotSpacing}px;
-        `;
+        root.style.setProperty('--texture-image', `radial-gradient(${dotColor} ${dotSize}px, transparent ${dotSize}px)`);
+        root.style.setProperty('--texture-size', `${dotSpacing}px ${dotSpacing}px`);
+        root.style.setProperty('--texture-repeat', 'repeat');
         break;
       default:
-        textureStyle = '';
-    }
-    
-    // Apply the texture style directly to the body
-    if (textureStyle) {
-      document.body.style.setProperty('--texture-style', textureStyle);
-    } else {
-      document.body.style.removeProperty('--texture-style');
+        // Reset variables
+        root.style.removeProperty('--texture-image');
+        root.style.removeProperty('--texture-size');
+        root.style.removeProperty('--texture-repeat');
     }
   };
 
