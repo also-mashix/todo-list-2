@@ -1,0 +1,398 @@
+.theme-selector-container {
+  position: relative;
+  z-index: 1100; /* Higher than header */
+}
+
+.header-content {
+  position: relative;
+  z-index: 1000; /* Ensure header is above other content but below theme panel */
+}
+
+.theme-panel {
+  position: fixed;
+  top: 70px; /* Position below header */
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  color: #1a1a1a;
+  animation: slideDown 0.2s ease-out;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 1200; /* Highest z-index to ensure it's on top */
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.theme-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.theme-panel h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dark-mode-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dark-mode-toggle {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  /* height: 20px; */
+}
+
+.dark-mode-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-1);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--color-1);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.sun-icon,
+.moon-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: color 0.3s ease;
+  width: 16px;
+  height: 16px;
+}
+
+[data-theme="dark"] .sun-icon,
+[data-theme="dark"] .moon-icon {
+  color: #aaa;
+}
+
+input:checked ~ .moon-icon {
+  color: white;
+}
+
+input:not(:checked) ~ .sun-icon {
+  color: #ffd700;
+}
+
+.color-palette {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.color-swatches-container {
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-1);
+  cursor: pointer;
+}
+
+.color-control-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.color-control-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-1);
+}
+
+.color-control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.color-control-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #333;
+}
+
+[data-theme="dark"] .color-control-btn {
+  background: #2d2d2d;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .color-control-btn:hover:not(:disabled) {
+  background: #3a3a3a;
+}
+
+[data-theme="dark"] .color-control-btn svg {
+  color: #f0f0f0;
+}
+
+.color-picker-popup {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.texture-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.texture-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.texture-option span {
+  font-size: 12px;
+}
+
+.texture-option:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.texture-option.active {
+  background-color: rgba(var(--color-1-rgb), 0.1);
+  border: 1px solid var(--color-1);
+}
+
+.texture-preview {
+  width: 60px;
+  height: 40px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.texture-preview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.texture-preview.grid {
+  background-image: 
+    linear-gradient(var(--texture-color, rgba(0, 0, 0, 0.1)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--texture-color, rgba(0, 0, 0, 0.1)) 1px, transparent 1px);
+  background-size: 10px 10px;
+  opacity: var(--texture-intensity, 0.5);
+}
+
+.texture-preview.dots {
+  background-image: radial-gradient(var(--texture-color, rgba(0, 0, 0, 0.1)) 1px, transparent 1px);
+  background-size: 10px 10px;
+  opacity: var(--texture-intensity, 0.5);
+}
+
+.texture-preview.noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0%25' y='0%25' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: var(--texture-intensity, 0.5);
+}
+
+button.add-color-btn,
+button.remove-color-btn,
+button.color-picker-toggle {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+button.add-color-btn:hover,
+button.remove-color-btn:hover,
+button.color-picker-toggle:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.texture-intensity {
+  margin: 20px 0;
+  padding: 15px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.texture-intensity label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.texture-intensity input[type="range"] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: var(--border-color);
+  border-radius: 2px;
+  outline: none;
+  margin: 10px 0;
+}
+
+.texture-intensity input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--theme-color-1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 2px var(--card-bg);
+}
+
+.texture-intensity input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+.intensity-value {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.dark-mode-toggle {
+  padding-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dark-mode-toggle input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Dark mode styles */
+[data-theme="dark"] .theme-panel {
+  background: rgba(40, 44, 52, 0.95);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .theme-panel h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .texture-preview {
+  background-color: #2c2f3a;
+  border-color: #3e4451;
+}
+
+[data-theme="dark"] .texture-option:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] button.add-color-btn,
+[data-theme="dark"] button.remove-color-btn,
+[data-theme="dark"] button.color-picker-toggle {
+  background: #2c2f3a;
+  border-color: #3e4451;
+  color: #ffffff;
+}
+
+[data-theme="dark"] button.add-color-btn:hover,
+[data-theme="dark"] button.remove-color-btn:hover,
+[data-theme="dark"] button.color-picker-toggle:hover {
+  background: #3e4451;
+  border-color: #4f5666;
+}
