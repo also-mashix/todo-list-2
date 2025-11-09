@@ -1,0 +1,7 @@
+0000000000000000000000000000000000000000 ef0fc5290c2255c12a1c9fd624f09c1a870e50cb mashix <micahak@gmail.com> 1754514898 -0400	commit (initial): initial commit
+ef0fc5290c2255c12a1c9fd624f09c1a870e50cb 95c762a162d76841225a3098b7416af0e1fc717a mashix <micahak@gmail.com> 1754516152 -0400	commit: added basic to-do list code
+95c762a162d76841225a3098b7416af0e1fc717a f854d6583f3e39e24ede5e812311ab3554232f3b mashix <micahak@gmail.com> 1754597950 -0400	commit: adding components
+f854d6583f3e39e24ede5e812311ab3554232f3b b0e3ede3e5a255abd18c1e3b03456fef86755066 mashix <micahak@gmail.com> 1754598478 -0400	commit: added some styling
+b0e3ede3e5a255abd18c1e3b03456fef86755066 c1b33dbf8bb6fea938e8c745040aceae2ecceb76 mashix <micahak@gmail.com> 1754608116 -0400	commit: fixed up the styling
+c1b33dbf8bb6fea938e8c745040aceae2ecceb76 14bdf3bc6795551fbc2c570b4738ae9311c34a73 mashix <micahak@gmail.com> 1754608832 -0400	commit: Fixed togggleIsComplete typo, style changes
+14bdf3bc6795551fbc2c570b4738ae9311c34a73 918cdc9cdde74b1a52eafe8ed742c20892ad5e09 mashix <micahak@gmail.com> 1754747200 -0400	commit: tweaks
