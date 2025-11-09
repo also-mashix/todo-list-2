@@ -44,10 +44,6 @@ body {
   color: var(--text-on-bg);
   position: relative;
   background-color: var(--color-1, #7C3AED);
-  background-image: var(--theme-gradient);
-  background-attachment: fixed;
-  background-size: 400% 400%;
-  animation: gradientBG 20s ease infinite;
   transition: background-color 0.3s ease, background-image 0.3s ease;
 }
 
@@ -152,6 +148,18 @@ body::after {
   align-items: center;
   z-index: 1;
 }
+
+.task-form {
+  display: flex;
+  gap: 10px;
+  max-width: 500px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
 .filters {
   margin: 20px auto;
   display: flex;
@@ -240,21 +248,28 @@ body::after {
   max-width: 500px;
   box-shadow: 0 2px 8px var(--shadow-color);
   border: 1px solid var(--border-color);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
 
 .todo-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--shadow-color);
+  background-color: #71b9c6a9;
 }
 
 .todo-item.completed {
   opacity: 0.8;
+  background-color: #5d60649f;
 }
 
 .todo-item.completed .todo-text {
   text-decoration: line-through;
   color: var(--text-secondary);
+}
+
+.todo-item:hover .delete-task {
+  color: #ff4d4d;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .todo-actions {
@@ -293,68 +308,51 @@ button.success {
   background: var(--success-color);
 }
 
-input[type="text"],
-input[type="text"]:focus {
-  width: 100%;
+.todo-input {
+  flex: 1;
+  min-width: 100px; /* Allow the input to shrink but not too much */
   padding: 10px 15px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: var(--card-bg);
+  color: var(--text-on-bg);
   font-size: 16px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  height: 42px; /* Match button height */
 }
 
-input[type="text"]:focus {
+.todo-input:focus {
   border-color: var(--color-1);
   box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
 }
 
-/* Checkbox styling */
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.checkbox-container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 24px;
+/* Removed old checkbox styles - consolidated with modern checkbox styles above */
+/* Removed duplicate styles - consolidated above */
+/* Consolidated checkbox styling */
+.todo-item input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 24px;
-  background-color: var(--bg-color);
+  height: 24px;
+  margin-right: 10px;
   border: 2px solid var(--color-1);
   border-radius: 6px;
+  cursor: pointer;
+  position: relative;
   transition: all 0.2s ease;
+  background-color: var(--card-bg);
 }
 
-.checkbox-container:hover input ~ .checkmark {
-  background-color: rgba(124, 58, 237, 0.1);
-}
-
-.checkbox-container input:checked ~ .checkmark {
+.todo-item input[type="checkbox"]:checked {
   background-color: var(--color-1);
-  border-color: var(--color-1);
 }
 
-.checkmark:after {
+.todo-item input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
-  display: none;
   left: 8px;
   top: 4px;
   width: 5px;
@@ -364,39 +362,18 @@ input[type="text"]:focus {
   transform: rotate(45deg);
 }
 
-.checkbox-container input:checked ~ .checkmark:after {
-  display: block;
+.todo-item input[type="checkbox"]:hover {
+  background-color: rgba(124, 58, 237, 0.1);
 }
-.todo-item:hover {
-  background-color: #71b9c6a9;
-}
-.complete {
-  background-color: #5d60649f;
-}
-.complete p {
-  text-decoration: line-through;
-  color: #ccc;
-}
-/* Modern checkbox styling */
-.todo-item input[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
-  border: 2px solid #6b7280;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+
+.todo-item input[type="checkbox"]:checked:hover {
+  background-color: var(--color-1);
+  opacity: 0.9;
 }
 
 .todo-item input[type="checkbox"]:hover {
-  border-color: #9ca3af;
-  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-2);
+  background-color: rgba(124, 58, 237, 0.15);
 }
 
 .todo-item input[type="checkbox"]:checked {
@@ -428,7 +405,6 @@ input[type="text"]:focus {
 .todo-input {
   width: 60%;
   padding: 10px;
-  margin-left: 10%;
   margin-bottom: 20px;
   margin-right: 10px;
   border: 1px solid #ccc;
@@ -452,10 +428,7 @@ input[type="text"]:focus {
   padding: 0;
 }
 
-.todo-item:hover .delete-task {
-  color: #ff4d4d;
-  background: rgba(255, 255, 255, 0.2);
-}
+/* Moved delete task hover effect to .todo-item:hover section */
 
 .delete-task:hover {
   color: white !important;
@@ -469,9 +442,15 @@ input[type="text"]:focus {
   background-color: #4caf50;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 0 20px;
+  height: 42px; /* Fixed height to match input */
+  white-space: nowrap;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0; /* Prevent button from shrinking */
+  transition: background-color 0.2s, transform 0.1s;
 }
 .add-task:hover {
   background-color: #45a049;

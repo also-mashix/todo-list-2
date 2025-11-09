@@ -23,6 +23,11 @@ const ThemeSelector = () => {
     updateTheme(newColors, theme.texture);
   };
 
+  const handleColorSwatchClick = (index) => {
+    setActiveColorIndex(index);
+    setShowColorPicker(true);
+  };
+
   const handleTextureChange = (textureId) => {
     updateTheme(theme.colors, textureId, theme.textureIntensity);
   };
@@ -80,7 +85,38 @@ const ThemeSelector = () => {
       {isOpen && (
         <div className="theme-panel">
           <div className="color-selector">
-            <h3>Color Theme</h3>
+            <div className="theme-header">
+              <h3>Color Theme</h3>
+              <div className="dark-mode-toggle-container">
+                <span className="sun-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                </span>
+                <label className="dark-mode-toggle">
+                  <input 
+                    type="checkbox" 
+                    checked={theme.darkMode} 
+                    onChange={toggleDarkMode}
+                    aria-label="Toggle dark mode"
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <span className="moon-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+                </span>
+              </div>
+            </div>
             <div className="color-palette">
               <button 
                 className="color-control-btn remove-btn"
@@ -110,7 +146,7 @@ const ThemeSelector = () => {
                       border: activeColorIndex === index ? '3px solid white' : '1px solid rgba(0,0,0,0.2)',
                       boxShadow: activeColorIndex === index ? '0 0 0 2px var(--color-1)' : 'none'
                     }}
-                    onClick={() => setActiveColorIndex(index)}
+                    onClick={() => handleColorSwatchClick(index)}
                   ></div>
                 ))}
               </div>
@@ -120,7 +156,10 @@ const ThemeSelector = () => {
                 onClick={(e) => {
                   e.stopPropagation();
                   if (theme.colors.length < 3) {
-                    updateTheme([...theme.colors, '#7C3AED'], theme.texture);
+                    const newColors = [...theme.colors, '#7C3AED'];
+                    updateTheme(newColors, theme.texture);
+                    setActiveColorIndex(newColors.length - 1);
+                    setShowColorPicker(true);
                   }
                 }}
                 disabled={theme.colors.length >= 3}
@@ -142,13 +181,6 @@ const ThemeSelector = () => {
                 />
               </div>
             )}
-            
-            <button 
-              className="color-picker-toggle"
-              onClick={() => setShowColorPicker(!showColorPicker)}
-            >
-              {showColorPicker ? 'Hide Color Picker' : 'Show Color Picker'}
-            </button>
           </div>
 
           <div className="texture-selector">
@@ -184,15 +216,6 @@ const ThemeSelector = () => {
               </div>
             </div>
           )}
-          <div className="dark-mode-toggle">
-            <input 
-              type="checkbox" 
-              id="darkModeToggle" 
-              checked={theme.darkMode} 
-              onChange={toggleDarkMode} 
-            />
-            <label htmlFor="darkModeToggle">Dark Mode</label>
-          </div>
         </div>
       )}
     </div>
