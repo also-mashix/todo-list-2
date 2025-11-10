@@ -135,6 +135,7 @@ function TodoList() {
 
     return (
         <div className="todo-list" data-testid="todo-list">
+            <TaskForm text={text} setText={setText} addTask={addTask} />
             <div className="filters" data-active-filter={filter}>
                 <button 
                     onClick={() => setFilter('all')}
@@ -166,7 +167,6 @@ function TodoList() {
                     onStartEditing={handleStartEditing}
                 />
             ))}
-            <TaskForm text={text} setText={setText} addTask={addTask} />
         </div>
     );
 }
