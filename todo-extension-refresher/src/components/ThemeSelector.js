@@ -10,6 +10,11 @@ const textures = [
   { id: 'dots', name: 'Dots' }
 ];
 
+/**
+ * ThemeSelector component - provides UI for customizing the app's theme
+ * @param {Object} props - Component props
+ * @param {Function} props.onThemeChange - Callback when theme changes (optional)
+ */
 const ThemeSelector = () => {
   const { theme, updateTheme, updateTextureIntensity, toggleDarkMode } = useTheme();
   const [activeColorIndex, setActiveColorIndex] = useState(0);
@@ -17,26 +22,45 @@ const ThemeSelector = () => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
+  /**
+   * Handles color change from color picker
+   * @param {Object} color - The selected color object from react-color
+   */
   const handleColorChange = (color) => {
     const newColors = [...theme.colors];
     newColors[activeColorIndex] = color.hex;
     updateTheme(newColors, theme.texture);
   };
 
+  /**
+   * Sets active color index and shows color picker
+   * @param {number} index - Index of the color swatch clicked
+   */
   const handleColorSwatchClick = (index) => {
     setActiveColorIndex(index);
     setShowColorPicker(true);
   };
 
+  /**
+   * Updates the selected texture
+   * @param {string} textureId - ID of the selected texture
+   */
   const handleTextureChange = (textureId) => {
     updateTheme(theme.colors, textureId, theme.textureIntensity);
   };
 
+  /**
+   * Updates texture intensity based on slider input
+   * @param {Object} e - The event object from the input
+   */
   const handleIntensityChange = (e) => {
     const intensity = parseFloat(e.target.value);
     updateTextureIntensity(intensity);
   };
 
+  /**
+   * Sets up click outside listeners to close color picker and theme panel
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Close color picker if open and click is outside
@@ -107,6 +131,8 @@ const ThemeSelector = () => {
                     checked={theme.darkMode} 
                     onChange={toggleDarkMode}
                     aria-label="Toggle dark mode"
+                    role="switch"
+                    aria-checked={theme.darkMode}
                   />
                   <span className="slider round"></span>
                 </label>

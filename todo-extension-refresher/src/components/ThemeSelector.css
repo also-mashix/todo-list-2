@@ -18,7 +18,7 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  width: 300px;
+  width: min(300px, 90vw);
   color: #1a1a1a;
   animation: slideDown 0.2s ease-out;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -252,6 +252,8 @@ input:not(:checked) ~ .sun-icon {
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .texture-preview::after {

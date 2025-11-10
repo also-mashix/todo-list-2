@@ -1,31 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * TodoItem component - renders an individual todo item
+ * @param {Object} props - Component props
+ * @param {Object} props.task - The task object
+ * @param {boolean} props.isEditing - Whether this item is in edit mode
+ * @param {Function} props.deleteTask - Function to delete the task
+ * @param {Function} props.toggleComplete - Function to toggle task completion
+ * @param {Function} props.updateTaskText - Function to update task text
+ * @param {Function} props.onStartEditing - Function to initiate editing
+ */
 function TodoItem({task, isEditing, deleteTask, toggleComplete, updateTaskText, onStartEditing}) {
     const [editText, setEditText] = useState(task.text);
 
-    // Update editText when task.text changes
+    /**
+     * Resets edit text when task changes
+     */
     useEffect(() => {
         setEditText(task.text);
-    }, [task.text]);
+    }, [task]);
 
+    /**
+     * Toggles task completion status
+     */
     function handleChange() {
         toggleComplete(task.taskId);
     }
 
+    /**
+     * Initiates editing mode
+     */
     function handleDoubleClick() {
         onStartEditing(task.taskId);
     }
 
+    /**
+     * Updates edit text state
+     * @param {Object} e - The event object
+     */
     function handleEditChange(e) {
         setEditText(e.target.value);
     }
 
+    /**
+     * Saves edited text
+     * @param {Object} e - The event object
+     */
     function handleSubmit(e) {
         e.preventDefault();
         updateTaskText(task.taskId, editText);
     }
 
+    /**
+     * Cancels editing and reverts to original text
+     */
     function handleCancel() {
         setEditText(task.text);
         onStartEditing(null);
@@ -55,7 +84,13 @@ function TodoItem({task, isEditing, deleteTask, toggleComplete, updateTaskText, 
                         onChange={handleChange}
                     />
                     <p className='task-text' onDoubleClick={handleDoubleClick}>{task.text}</p>
-                    <button className='delete-task' onClick={() => deleteTask(task.taskId)}>X</button>
+                    <button 
+                        className='delete-task' 
+                        onClick={() => deleteTask(task.taskId)}
+                        aria-label={`Delete task ${task.text}`}
+                    >
+                        X
+                    </button>
                 </>
             )}
         </div>
