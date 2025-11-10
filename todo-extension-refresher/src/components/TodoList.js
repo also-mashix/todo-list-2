@@ -134,7 +134,7 @@ function TodoList() {
     });
 
     return (
-        <div className="todo-list">
+        <div className="todo-list" data-testid="todo-list">
             <div className="filters" data-active-filter={filter}>
                 <button 
                     onClick={() => setFilter('all')}

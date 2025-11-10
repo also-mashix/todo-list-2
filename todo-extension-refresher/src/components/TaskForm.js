@@ -9,6 +9,15 @@ import React, { useEffect, useRef } from 'react';
 function TaskForm({ text, setText, addTask }) {
     const inputRef = useRef(null);
 
+    function handleSubmit() {
+        const trimmedText = text.trim();
+        if (!trimmedText) {
+            return;
+        }
+        addTask(trimmedText);
+        setText('');
+    }
+
     /**
      * Sets up global key handler to focus input when '/' is pressed
      */
@@ -35,13 +44,14 @@ function TaskForm({ text, setText, addTask }) {
                 value={text}
                 onChange={e => setText(e.target.value)}
                 onKeyDown={e => {
-                    if (e.key === 'Enter' && text.trim()) {
-                        addTask(text);
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSubmit();
                     }
                 }}
                 placeholder="Type to add a task..."
             />
-            <button className='add-task' onClick={() => addTask(text)}>Add</button>
+            <button className='add-task' onClick={handleSubmit}>Add</button>
         </div>
     );
 }
