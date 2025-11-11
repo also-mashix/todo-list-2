@@ -39,6 +39,14 @@ function TodoList() {
                 chrome.storage.local.get(['tasks'], (result) => {
                     if (result.tasks && result.tasks.length > 0) {
                         setTasks(result.tasks);
+                        return;
+                    }
+
+                    if (typeof localStorage !== 'undefined') {
+                        const savedTasks = localStorage.getItem('tasks');
+                        if (savedTasks) {
+                            setTasks(JSON.parse(savedTasks));
+                        }
                     }
                 });
             } else {

@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "description": "A Chrome extension to manage your to-do lists.",
   "action": {
-    "default_title": "Open To-Do Side Panel",
+    "default_title": "Open To-Do List",
     "default_icon": "favicon.ico"
   },
   "icons": {
@@ -16,7 +16,15 @@
   },
   "permissions": [
     "storage",
+    "activeTab",
+    "tabs",
     "sidePanel"
+  ],
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
@@ -27,8 +35,5 @@
       "js": ["content.js"],
       "run_at": "document_idle"
     }
-  ],
-  "side_panel": {
-    "default_path": "index.html"
-  }
+  ]
 }
