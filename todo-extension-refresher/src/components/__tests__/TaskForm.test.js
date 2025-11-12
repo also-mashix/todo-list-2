@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TaskForm from '../TaskForm';
+import { ThemeProvider } from '../../context/ThemeContext';
 
 describe('TaskForm', () => {
   const mockSetText = jest.fn();
@@ -13,28 +14,36 @@ describe('TaskForm', () => {
     addTask: mockAddTask
   };
 
+  // Helper function to render TaskForm with ThemeProvider
+  const renderTaskForm = (props = defaultProps) => {
+    return render(
+      <ThemeProvider>
+        <TaskForm {...props} />
+      </ThemeProvider>
+    );
+  };
+
   beforeEach(() => {
     mockSetText.mockClear();
     mockAddTask.mockClear();
   });
 
-  it('renders input and button', () => {
-    render(<TaskForm {...defaultProps} />);
+  it('renders input', () => {
+    renderTaskForm();
     const input = screen.getByPlaceholderText('Type to add a task...');
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute('name', 'todo-task');
-    expect(screen.getByText('Add')).toBeInTheDocument();
   });
 
   it('calls setText when input changes', () => {
-    render(<TaskForm {...defaultProps} />);
+    renderTaskForm();
     const input = screen.getByPlaceholderText('Type to add a task...');
     fireEvent.change(input, { target: { value: 'New task' } });
     expect(mockSetText).toHaveBeenCalledWith('New task');
   });
 
   it('calls addTask with trimmed text when Enter is pressed', () => {
-    render(<TaskForm {...defaultProps} text="  New task  " />);
+    renderTaskForm({ ...defaultProps, text: '  New task  ' });
     const input = screen.getByPlaceholderText('Type to add a task...');
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     expect(mockAddTask).toHaveBeenCalledWith('New task');
@@ -42,24 +51,14 @@ describe('TaskForm', () => {
   });
 
   it('does not call addTask when Enter is pressed with empty input', () => {
-    render(<TaskForm {...defaultProps} text="   " />);
+    renderTaskForm({ ...defaultProps, text: '   ' });
     const input = screen.getByPlaceholderText('Type to add a task...');
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     expect(mockAddTask).not.toHaveBeenCalled();
   });
 
-  it('calls addTask and clears input when Add button is clicked', () => {
-    render(<TaskForm {...defaultProps} text="  New task  " />);
-
-    const addButton = screen.getByText('Add');
-    fireEvent.click(addButton);
-
-    expect(mockAddTask).toHaveBeenCalledWith('New task');
-    expect(mockSetText).toHaveBeenCalledWith('');
-  });
-
   it('focuses input when / is pressed', () => {
-    render(<TaskForm {...defaultProps} />);
+    renderTaskForm();
     const input = screen.getByPlaceholderText('Type to add a task...');
     
     // Mock focus method

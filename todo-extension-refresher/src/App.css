@@ -177,7 +177,6 @@ body::after {
   margin: 10px auto;
   padding: 0 10px;
   box-sizing: border-box;
-  justify-content: space-between;
 }
 
 .filters {

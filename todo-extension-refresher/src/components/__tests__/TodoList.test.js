@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TodoList from '../TodoList';
+import { ThemeProvider } from '../../context/ThemeContext';
 
 // Mock localStorage
 let store = {};
@@ -55,6 +56,15 @@ Object.defineProperty(window, 'chrome', {
   writable: true 
 });
 
+// Helper function to render TodoList with ThemeProvider
+const renderTodoList = () => {
+  return render(
+    <ThemeProvider>
+      <TodoList />
+    </ThemeProvider>
+  );
+};
+
 describe('TodoList', () => {
   beforeEach(() => {
     store = {};
@@ -78,25 +88,24 @@ describe('TodoList', () => {
   });
 
   it('renders with default tasks', () => {
-    render(<TodoList />);
+    renderTodoList();
     expect(screen.getByText('build a react project')).toBeInTheDocument();
     expect(screen.getByText('build out a basic to do app')).toBeInTheDocument();
     expect(screen.getByText('integrate the to do app in a chrome extension')).toBeInTheDocument();
   });
 
   it('adds a new task', () => {
-    render(<TodoList />);
+    renderTodoList();
     const input = screen.getByPlaceholderText('Type to add a task...');
-    const addButton = screen.getByText('Add');
     
     fireEvent.change(input, { target: { value: 'New task' } });
-    fireEvent.click(addButton);
+    fireEvent.keyDown(input, { key: 'Enter' });
     
     expect(screen.getByText('New task')).toBeInTheDocument();
   });
 
   it('toggles task completion', () => {
-    render(<TodoList />);
+    renderTodoList();
 
     const taskItem = screen.getByText('build out a basic to do app').closest('.todo-item');
     expect(taskItem).toBeInTheDocument();
@@ -109,7 +118,7 @@ describe('TodoList', () => {
   });
 
   it('deletes a task', () => {
-    render(<TodoList />);
+    renderTodoList();
 
     const deleteButton = screen.getByLabelText('Delete task build out a basic to do app');
     fireEvent.click(deleteButton);
@@ -118,7 +127,7 @@ describe('TodoList', () => {
   });
 
   it('filters tasks', () => {
-    render(<TodoList />);
+    renderTodoList();
     
     // Check initial state (all tasks visible)
     expect(screen.getByText('build a react project')).toBeInTheDocument();
@@ -136,7 +145,7 @@ describe('TodoList', () => {
   });
 
   it('sorts tasks with incomplete first', () => {
-    render(<TodoList />);
+    renderTodoList();
     
     // Get all task text elements
     const taskTexts = screen.getAllByText(/build|integrate/).map(el => el.textContent);
@@ -149,14 +158,13 @@ describe('TodoList', () => {
   });
 
   it('persists tasks to storage', () => {
-    render(<TodoList />);
+    renderTodoList();
     
     // Add a new task
     const input = screen.getByPlaceholderText('Type to add a task...');
-    const addButton = screen.getByText('Add');
     
     fireEvent.change(input, { target: { value: 'New task' } });
-    fireEvent.click(addButton);
+    fireEvent.keyDown(input, { key: 'Enter' });
     
     // Check if chrome.storage.local.set was called (since we're in extension context)
     expect(chrome.storage.local.set).toHaveBeenCalledWith(
@@ -183,7 +191,7 @@ describe('TodoList', () => {
       callback({ tasks: mockTasks });
     });
 
-    render(<TodoList />);
+    renderTodoList();
 
     expect(await screen.findByText('Test task from storage')).toBeInTheDocument();
   });

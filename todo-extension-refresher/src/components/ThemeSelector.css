@@ -1,6 +1,6 @@
 .theme-selector-container {
   position: relative;
-  z-index: 1100; /* Higher than header */
+  z-index: 10;
 }
 
 .header-content {
@@ -10,7 +10,7 @@
 
 .theme-panel {
   position: fixed;
-  top: 70px; /* Position below header */
+  top: 80px; /* Position below the inline theme button */
   right: 20px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -324,6 +324,7 @@ button.color-picker-toggle:hover {
 .texture-intensity input[type="range"] {
   width: 100%;
   height: 4px;
+  appearance: none;
   -webkit-appearance: none;
   background: var(--border-color);
   border-radius: 2px;
@@ -332,6 +333,7 @@ button.color-picker-toggle:hover {
 }
 
 .texture-intensity input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
   -webkit-appearance: none;
   width: 16px;
   height: 16px;

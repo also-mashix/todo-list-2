@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import ThemeSelector from './ThemeSelector';
 
 /**
  * TaskForm component - handles task input and submission
@@ -52,7 +53,7 @@ function TaskForm({ text, setText, addTask }) {
                 }}
                 placeholder="Type to add a task..."
             />
-            <button className='add-task' onClick={handleSubmit}>Add</button>
+            <ThemeSelector />
         </div>
     );
 }
