@@ -41,6 +41,7 @@ function TaskForm({ text, setText, addTask }) {
             <input 
                 ref={inputRef}
                 className="todo-input"
+                name="todo-task"
                 value={text}
                 onChange={e => setText(e.target.value)}
                 onKeyDown={e => {

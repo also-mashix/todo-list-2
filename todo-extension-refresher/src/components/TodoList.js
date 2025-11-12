@@ -1,3 +1,4 @@
+/* global chrome */
 import React, {useState, useEffect} from "react";
 import TodoItem from "./TodoItem.js";
 import TaskForm from "./TaskForm.js";
@@ -9,38 +10,71 @@ import TaskForm from "./TaskForm.js";
 function TodoList() {
     const [editingTaskId, setEditingTaskId] = useState(null);
     /**
-     * State for tasks with localStorage persistence
+     * State for tasks with Chrome storage API persistence
      * @type {[Array<{taskId: number, text: string, isComplete: boolean}>, Function]}
      */
-    const [tasks, setTasks] = useState(() => {
-        const savedTasks = localStorage.getItem('tasks');
-        return savedTasks ? JSON.parse(savedTasks) : [
-            {
-                taskId: 1,
-                text: 'build a react project',
-                isComplete: true
-            },
-            {
-                taskId: 2,
-                text: 'build out a basic to do app',
-                isComplete: false
-            },
-            {
-                taskId: 3,
-                text: 'integrate the to do app in a chrome extension',
-                isComplete: false
+    const [tasks, setTasks] = useState([
+        {
+            taskId: 1,
+            text: 'build a react project',
+            isComplete: true
+        },
+        {
+            taskId: 2,
+            text: 'build out a basic to do app',
+            isComplete: false
+        },
+        {
+            taskId: 3,
+            text: 'integrate the to do app in a chrome extension',
+            isComplete: false
+        }
+    ]);
+    
+    // Load tasks from Chrome storage on component mount
+    useEffect(() => {
+        const loadTasks = async () => {
+            // Check if we're running in a Chrome extension environment
+            if (typeof chrome !== 'undefined' && chrome && chrome.storage) {
+                chrome.storage.local.get(['tasks'], (result) => {
+                    if (result.tasks && result.tasks.length > 0) {
+                        setTasks(result.tasks);
+                        return;
+                    }
+
+                    if (typeof localStorage !== 'undefined') {
+                        const savedTasks = localStorage.getItem('tasks');
+                        if (savedTasks) {
+                            setTasks(JSON.parse(savedTasks));
+                        }
+                    }
+                });
+            } else {
+                // Fallback to localStorage when not in extension context (e.g., during development)
+                const savedTasks = localStorage.getItem('tasks');
+                if (savedTasks) {
+                    setTasks(JSON.parse(savedTasks));
+                }
             }
-        ];
-    });
+        };
+        
+        loadTasks();
+    }, []);
 
     const [text, setText] = useState('');
     const [filter, setFilter] = useState('all');
 
     /**
-     * Effect to persist tasks to localStorage whenever they change
+     * Effect to persist tasks to storage whenever they change
      */
     useEffect(() => {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        // Save to Chrome storage if in extension environment
+        if (typeof chrome !== 'undefined' && chrome && chrome.storage) {
+            chrome.storage.local.set({ tasks: tasks });
+        } else {
+            // Fallback to localStorage when not in extension context
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
     }, [tasks]);
 
     /**

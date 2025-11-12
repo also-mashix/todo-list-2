@@ -40,6 +40,21 @@ Object.defineProperty(window, 'localStorage', {
   writable: true 
 });
 
+// Mock chrome storage
+const chrome = {
+  storage: {
+    local: {
+      set: jest.fn(),
+      get: jest.fn(),
+    },
+  },
+};
+
+Object.defineProperty(window, 'chrome', { 
+  value: chrome,
+  writable: true 
+});
+
 describe('TodoList', () => {
   beforeEach(() => {
     store = {};
@@ -58,6 +73,8 @@ describe('TodoList', () => {
     localStorage.clear.mockImplementation(() => {
       store = {};
     });
+    chrome.storage.local.set.mockClear();
+    chrome.storage.local.get.mockClear();
   });
 
   it('renders with default tasks', () => {
@@ -131,7 +148,7 @@ describe('TodoList', () => {
     expect(taskTexts[2]).toBe('build a react project');
   });
 
-  it('persists tasks to localStorage', () => {
+  it('persists tasks to storage', () => {
     render(<TodoList />);
     
     // Add a new task
@@ -141,31 +158,33 @@ describe('TodoList', () => {
     fireEvent.change(input, { target: { value: 'New task' } });
     fireEvent.click(addButton);
     
-    // Check if localStorage.setItem was called
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'tasks',
-      expect.any(String)
+    // Check if chrome.storage.local.set was called (since we're in extension context)
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      { tasks: expect.any(Array) }
     );
     
-    // Get the last call to setItem (which should be our new task)
-    const setItemCalls = localStorage.setItem.mock.calls;
-    const lastCall = setItemCalls[setItemCalls.length - 1];
-    const storedTasks = JSON.parse(lastCall[1]);
+    // Get the last call to set (which should be our new task)
+    const setCalls = chrome.storage.local.set.mock.calls;
+    const lastCall = setCalls[setCalls.length - 1];
+    const storedTasks = lastCall[0].tasks;
     
     // Check if our new task is in the stored tasks
     const newTask = storedTasks.find(task => task.text === 'New task');
     expect(newTask).toBeTruthy();
   });
 
-  it('loads tasks from localStorage', () => {
+  it('loads tasks from storage', async () => {
     const mockTasks = [
-      { taskId: 1, text: 'Test task from localStorage', isComplete: false }
+      { taskId: 1, text: 'Test task from storage', isComplete: false }
     ];
 
-    localStorage.__setMockData('tasks', JSON.stringify(mockTasks));
+    // Mock chrome storage
+    chrome.storage.local.get.mockImplementation((keys, callback) => {
+      callback({ tasks: mockTasks });
+    });
 
     render(<TodoList />);
 
-    expect(screen.getByText('Test task from localStorage')).toBeInTheDocument();
+    expect(await screen.findByText('Test task from storage')).toBeInTheDocument();
   });
 });

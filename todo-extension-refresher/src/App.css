@@ -46,6 +46,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  min-width: 350px;
+  width: 100%;
+  max-width: 600px;
   color: var(--text-on-bg);
   position: relative;
   background-color: var(--color-1, #7C3AED);
@@ -101,10 +104,11 @@ body::after {
 
 .App {
   text-align: left;
-  margin: 20px auto;
-  max-width: 800px;
-  min-width: 500px;
-  padding: 30px;
+  margin: 10px auto;
+  max-width: 350px;
+  min-width: 300px;
+  width: 100%;
+  padding: 15px;
   background: var(--card-bg);
   border-radius: 15px;
   box-shadow: 0 8px 30px var(--shadow-color);
@@ -168,22 +172,22 @@ body::after {
 .task-form {
   display: flex;
   gap: 10px;
-  max-width: 500px;
+  max-width: 320px;
   width: 100%;
-  margin: 20px auto;
-  padding: 0 20px;
+  margin: 10px auto;
+  padding: 0 10px;
   box-sizing: border-box;
   justify-content: space-between;
 }
 
 .filters {
-  margin: 20px auto;
+  margin: 15px auto;
   display: flex;
   background: var(--border-color);
   border-radius: 8px;
   padding: 4px;
   width: 100%;
-  max-width: 500px;
+  max-width: 320px;
   justify-content: space-between;
   position: relative;
   backdrop-filter: blur(5px);
@@ -247,21 +251,21 @@ body::after {
 
 .todo-list {
   width: 100%;
-  max-width: 800px;
+  max-width: 320px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 10px;
   box-sizing: border-box;
 }
 
 .todo-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  padding: 15px 10px;
   justify-content: space-between;
   margin: 15px auto;
   background-color: var(--card-bg);
   border-radius: 12px;
-  max-width: 500px;
+  max-width: 300px;
   box-shadow: 0 2px 8px var(--shadow-color);
   border: 1px solid var(--border-color);
   transition: all 0.2s ease;
