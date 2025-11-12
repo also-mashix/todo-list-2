@@ -20,7 +20,9 @@ describe('TaskForm', () => {
 
   it('renders input and button', () => {
     render(<TaskForm {...defaultProps} />);
-    expect(screen.getByPlaceholderText('Type to add a task...')).toBeInTheDocument();
+    const input = screen.getByPlaceholderText('Type to add a task...');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('name', 'todo-task');
     expect(screen.getByText('Add')).toBeInTheDocument();
   });
 
